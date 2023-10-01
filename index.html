@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header id="dfa" class="heading-secondary header">This is quiz</header>
+    <div class="container grid grid--2-cols-skew grid--center-v">
+      <div id="question_container">
+        <form id="question_form">
+          <h3 id="question_title" class="heading-tertiary question-title"></h3>
+          <ul class="list option-list">
+            <li class="list-item">
+              <input
+                type="radio"
+                id="form_question_option_1"
+                name="ans"
+                value=""
+                class="option-radio-btn"
+              /><label for="form_question_option_1"></label>
+            </li>
+            <li class="list-item">
+              <input
+                type="radio"
+                id="form_question_option_2"
+                name="ans"
+                value=""
+                class="option-radio-btn"
+              /><label for="form_question_option_2"></label>
+            </li>
+            <li class="list-item">
+              <input
+                type="radio"
+                id="form_question_option_3"
+                name="ans"
+                value=""
+                class="option-radio-btn"
+              /><label for="form_question_option_3"></label>
+            </li>
+            <li class="list-item">
+              <input
+                type="radio"
+                id="form_question_option_4"
+                name="ans"
+                value=""
+                class="option-radio-btn"
+              /><label for="form_question_option_4"></label>
+            </li>
+          </ul>
+          <button
+            id="question_submit"
+            type="submit"
+            class="btn form-submit-btn"
+          >
+            Submit and Next &rarr;
+          </button>
+        </form>
+      </div>
+      <div id="final_score_card" class="invisible">
+        <h2 class="heading-tertiary score-card-title">Total numbers scored:</h2>
+        <span id="total_score" class="total-score"></span>
+      </div>
+      <div>
+        <ul id="score_tracker" class="list"></ul>
+      </div>
+    </div>
+
+    <script type="module" src="./src/index.js"></script>
+  </body>
+</html>
