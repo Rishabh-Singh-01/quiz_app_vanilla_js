@@ -39,8 +39,16 @@ export class User {
   }
 
   // updating the user
-  update(updateScore) {
+  update(updateScore, nextQuesRequired) {
     Helper.checkIllegalTypeParam(updateScore, 'number');
+    Helper.checkIllegalTypeParam(nextQuesRequired, 'boolean');
+
+    // if next question is not required then only update score
+    if (!nextQuesRequired) {
+      this.setScore(this.getScore() + updateScore);
+      return;
+    }
+
     // storing the previous question
     this.addToPreviousQuestions(this.getCurrentQuestionNo());
     // incrementign the score

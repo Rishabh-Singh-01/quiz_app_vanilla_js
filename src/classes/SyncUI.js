@@ -3,14 +3,12 @@ import { Helper } from './Helper.js';
 import { Questions } from './Questions.js';
 import { User } from './User.js';
 
+/**
+ * class that acts as both event listener and dispatcher which syncs data with UI in real time
+ */
 export class SyncUI {
   #user;
   #currentlySelectedOptionValue;
-  #formTitleHtmlEl;
-  #formOptionsHtmlEl;
-  #formQuestionSubmitBtnEl;
-  #totalScoreBoardEl;
-  #scoreTrackerEl;
 
   constructor(user) {
     if (!(user instanceof User)) {
@@ -24,33 +22,16 @@ export class SyncUI {
 
     this.#user = user;
 
-    this.#formTitleHtmlEl = document.getElementById(
-      ServiceConstants.HTML_ID_QUESTION_TITLE
-    );
-
-    this.#formOptionsHtmlEl = Array.from(
-      document.getElementsByTagName('input')
-    );
-
-    this.#formQuestionSubmitBtnEl = document.getElementById(
-      ServiceConstants.HTML_ID_QUESTION_SUBMIT_BTN
-    );
-
     // since in starting first option is always selected
     this.#currentlySelectedOptionValue = Questions.getQuestionById(
       this.#user.getCurrentQuestionNo()
     ).optionsList.at(0);
-
-    this.#totalScoreBoardEl = document.getElementById(
-      ServiceConstants.HTML_ID_TOTAL_SCORE
-    );
-
-    this.#scoreTrackerEl = document.getElementById(
-      ServiceConstants.HTML_ID_SCORE_TRACKER
-    );
   }
 
-  // getting dom elements
+  // Refactored to directly fetch dom elements instead of storing as fields
+  // since project is very small so no major perf issue
+
+  // Getters/Setters for dom elements
   #getCurrentQuestionInDisplay() {
     return Questions.getQuestionById(this.#user.getCurrentQuestionNo());
   }
@@ -62,23 +43,53 @@ export class SyncUI {
     this.#currentlySelectedOptionValue = val;
   }
   #getFormTitleHtmlEl() {
-    return this.#formTitleHtmlEl;
+    return document.getElementById(ServiceConstants.HTML_ID_QUESTION_TITLE);
   }
 
   #getFormOptionsHtmlEl() {
-    return this.#formOptionsHtmlEl;
+    return Array.from(document.getElementsByTagName('input'));
   }
   #getFormQuestionSubmitBtnEl() {
-    return this.#formQuestionSubmitBtnEl;
+    return document.getElementById(
+      ServiceConstants.HTML_ID_QUESTION_SUBMIT_BTN
+    );
   }
   #getTotalScoreBoardEl() {
-    return this.#totalScoreBoardEl;
+    return document.getElementById(ServiceConstants.HTML_ID_TOTAL_SCORE);
   }
   #getScoreTrackerEl() {
-    return this.#scoreTrackerEl;
+    return document.getElementById(ServiceConstants.HTML_ID_SCORE_TRACKER);
   }
 
   // cta methods
+  /**
+   * @param {*} isSubmittedAnsCorrect - Boolean representing the question submitted is correct or not
+   * @param {*} nextQuesRequired - Boolean repesents whether next quest if required by user or not
+   * update the user details/data
+   */
+  #updateUserData(isSubmittedAnsCorrect, nextQuesRequired) {
+    this.#user.update(
+      isSubmittedAnsCorrect
+        ? parseInt(ServiceConstants.CORRECT_MARKS_PER_QUESTION)
+        : parseInt(ServiceConstants.NEGATIVE_MARKS_PER_QUESTION),
+      nextQuesRequired
+    );
+  }
+
+  /**
+   * Tells whether its the last question or not
+   * @returns boolean representing the current question is the last question
+   */
+  #checkLastQuestion() {
+    return (
+      this.#user.getPreviousQuestions().length ===
+      parseInt(ServiceConstants.TOTAL_QUESTIONS) - 1
+    );
+  }
+
+  /**
+   * dynamically creates the score tracker as per questions requirement
+   */
   createScoreTracker() {
     for (let i = 0; i < ServiceConstants.TOTAL_QUESTIONS; i++) {
       const li = document.createElement('li');
@@ -98,17 +109,17 @@ export class SyncUI {
     }
   }
 
-  #updateScoreTracker(isCorrect) {
+  /**
+   * @param {boolean} isCorrect - represents the question submitted is correct or not
+   * Display tick icon if the isCorrect parameter is true else cross icon
+   */
+  #updateScoreTrackerIcon(isCorrect) {
     Helper.checkIllegalTypeParam(isCorrect, 'boolean');
-    // creating a new li child to be appended
-    console.log('jasdl;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;');
     const listItemList = Array.from(
       document.querySelectorAll(
         `.${ServiceConstants.HTML_CLASS_SCORE_TRACKER_LI_ICON}`
       )
     );
-    console.log(this.#getScoreTrackerEl());
-    console.log(listItemList.at(this.#user.getPreviousQuestions().length));
     listItemList.at(this.#user.getPreviousQuestions().length).innerText =
       isCorrect
         ? ServiceConstants.SCORE_TRACKER_CORRECT_ANS
@@ -120,11 +131,13 @@ export class SyncUI {
     }`;
   }
 
+  /**
+   * displayes the final score card after all the questions submission are done
+   */
   #displayFinalScoreCard() {
     const finalScoreCard = document.getElementById(
       ServiceConstants.HTML_ID_FINAL_SCORE_CARD
     );
-    console.log(finalScoreCard);
     finalScoreCard.classList.remove(ServiceConstants.HTML_CLASS_INVISIBLE);
     finalScoreCard.classList.add(
       ServiceConstants.HTML_CLASS_FINAL_SCORE_CARD_VISIBLE
@@ -133,100 +146,44 @@ export class SyncUI {
     document
       .getElementById(ServiceConstants.HTML_ID_QUESTION_CONTAINER)
       .remove();
+    this.#getTotalScoreBoardEl().innerText = this.#user.getScore();
   }
 
-  attachEventListeners() {
-    // event handler for submit btn and check the question
-    this.#getFormQuestionSubmitBtnEl().addEventListener('click', (e) => {
-      e.preventDefault();
-      console.log(e);
-      // TODO: right logic for checking the answer and updating score
-      const isSubmittedAnsCorrect = Questions.checkProvidedAnsIsCorrect(
-        this.#getCurrentQuestionInDisplay()['id'],
-        this.#getCurrentlySelectedOptionValue()
-      );
-      console.log(isSubmittedAnsCorrect);
-      this.#updateScoreTracker(isSubmittedAnsCorrect);
-
-      // incase all the questions are finised then display score board and return
-      if (
-        this.#user.getPreviousQuestions().length ===
-        parseInt(ServiceConstants.TOTAL_QUESTIONS) - 1
-      ) {
-        console.log('this is teh enddddddddddddddddddddddddddddddddd');
-        this.#displayFinalScoreCard();
-        // refactor this as well remove score card quest styles
-        Array.from(
-          document.getElementsByClassName(
-            ServiceConstants.HTML_CLASS_SCORE_TRACKER_LI_TEXT
-          )
-        ).forEach((el) =>
-          el.classList.remove(
-            ServiceConstants.HTML_CLASS_SCORE_TRACKER_LI_CURRENT_QUES
-          )
-        );
-        return;
-      }
-      this.#user.update(
-        isSubmittedAnsCorrect
-          ? parseInt(ServiceConstants.CORRECT_MARKS_PER_QUESTION)
-          : parseInt(ServiceConstants.NEGATIVE_MARKS_PER_QUESTION)
-      );
-      console.log('below is the score');
-      console.log(this.#user);
-      this.renderForm();
-    });
-
-    // event handler for options in the form question
-    this.#getFormOptionsHtmlEl().forEach((el) => {
-      el.addEventListener('click', (e) => {
-        console.log(e);
-        this.#setCurrentlySelectedOptionValue(e.target.value);
-        console.log(this.#getCurrentlySelectedOptionValue());
-
-        // removing the styles (refactor)
-        this.#getFormOptionsHtmlEl().forEach((el) => {
-          Array.from(el.labels)
-            .at(0)
-            .classList.remove(ServiceConstants.HTML_CLASS_OPTION_CHOSEN);
-        });
-        Array.from(e.target.labels)
-          .at(0)
-          .classList.add(ServiceConstants.HTML_CLASS_OPTION_CHOSEN);
-      });
-    });
-  }
-
-  // this methods provide with necessary styling and other resets needed before rendering data
-  #preRenderResets() {
-    // 0) Making sure total questions as requirement are asked (we are on last question)
-    if (
-      this.#user.getPreviousQuestions().length ===
-      parseInt(ServiceConstants.TOTAL_QUESTIONS) - 1
-    ) {
-      this.#getFormQuestionSubmitBtnEl().innerText =
-        'Submit and Check your total';
-    }
-
-    // 1) marking the first option every time a question is rendered and default selecting first option as selected ans
-    this.#getFormOptionsHtmlEl().at(0).checked = true;
-    this.#setCurrentlySelectedOptionValue(
-      Questions.getQuestionById(this.#user.getCurrentQuestionNo())
-        ['optionsList'].at(0)
-        .toString() // --> workaround incase somebody passed number as options (not complete feature)
-    );
-
+  /**
+   *
+   * @param { NodeListOf<HTMLLabelElement>} selectedOptionlabelList - List of labels mapped with selected radio button
+   * update the selected option label with new styles
+   */
+  #updateSelectedOptionLabelStyle(selectedOptionlabelList) {
     this.#getFormOptionsHtmlEl().forEach((el) => {
       Array.from(el.labels)
         .at(0)
         .classList.remove(ServiceConstants.HTML_CLASS_OPTION_CHOSEN);
     });
-    Array.from(this.#getFormOptionsHtmlEl().at(0).labels)
+    Array.from(selectedOptionlabelList)
       .at(0)
       .classList.add(ServiceConstants.HTML_CLASS_OPTION_CHOSEN);
+  }
 
-    // 2) changing current style to show which quesiton we are on
-    console.log('fafsfasfa');
+  /**
+   * removes the current display question styling in score tracker list
+   */
+  #removeScoreTrackerQuestionsStyle() {
+    Array.from(
+      document.getElementsByClassName(
+        ServiceConstants.HTML_CLASS_SCORE_TRACKER_LI_TEXT
+      )
+    ).forEach((el) =>
+      el.classList.remove(
+        ServiceConstants.HTML_CLASS_SCORE_TRACKER_LI_CURRENT_QUES
+      )
+    );
+  }
+
+  /**
+   * update the current question styles in score/question tracker list
+   */
+  #updateScoreTrackerCurrentQuesStyle() {
     const scoreTrackerQuestionsList = Array.from(
       document.getElementsByClassName(
         ServiceConstants.HTML_CLASS_SCORE_TRACKER_LI_TEXT
@@ -242,24 +199,101 @@ export class SyncUI {
       .classList.add(ServiceConstants.HTML_CLASS_SCORE_TRACKER_LI_CURRENT_QUES);
   }
 
-  // this methods render information in UI
-  renderForm() {
-    this.#preRenderResets();
-    console.log(this.#getCurrentlySelectedOptionValue());
-    console.log(this.#formTitleHtmlEl);
+  /**
+   * update the input radios to default value ie first or index 0
+   * also updates currently selected option value
+   * called in pre rendering of every question change/ submission of question
+   */
+  #updateSelectedInputToDefault() {
+    this.#getFormOptionsHtmlEl().at(0).checked = true;
+    this.#setCurrentlySelectedOptionValue(
+      Questions.getQuestionById(this.#user.getCurrentQuestionNo())
+        ['optionsList'].at(0)
+        .toString() // --> workaround incase somebody passed number as options (not complete feature)
+    );
+  }
+
+  /**
+   * attaches event listener to the appropriate dom elements
+   *
+   * NOTE - Mainly handles click event for the submission/next button and click events for option radio btns
+   */
+  attachEventListeners() {
+    // event handler for submit btn and check the question
+    this.#getFormQuestionSubmitBtnEl().addEventListener('click', (e) => {
+      e.preventDefault();
+      const isSubmittedAnsCorrect = Questions.checkProvidedAnsIsCorrect(
+        this.#getCurrentQuestionInDisplay()['id'],
+        this.#getCurrentlySelectedOptionValue()
+      );
+      this.#updateScoreTrackerIcon(isSubmittedAnsCorrect);
+
+      // incase all the questions are finised then display score board and return
+      if (this.#checkLastQuestion()) {
+        this.#updateUserData(isSubmittedAnsCorrect, false);
+        this.#displayFinalScoreCard();
+        this.#removeScoreTrackerQuestionsStyle();
+        return;
+      }
+
+      // incase there are remaining questions
+      this.#updateUserData(isSubmittedAnsCorrect, true);
+      this.renderForm();
+    });
+
+    // event handler for options in the form question
+    this.#getFormOptionsHtmlEl().forEach((el) => {
+      el.addEventListener('click', (e) => {
+        this.#setCurrentlySelectedOptionValue(e.target.value);
+        this.#updateSelectedOptionLabelStyle(e.target.labels);
+      });
+    });
+  }
+
+  /**
+   * this methods provide with necessary styling and other resets needed before rendering data
+   *
+   * NOTE - No data is pouplated here, this just resets the styling for every question
+   *        and provide some others styling
+   */
+  #preRenderStyling() {
+    // 0) Making sure total questions as requirement are asked (we are on last question)
+    if (this.#checkLastQuestion())
+      this.#getFormQuestionSubmitBtnEl().innerText =
+        ServiceConstants.TEXT_SUBMIT_BTN_LAST_QUES;
+
+    // 1) marking the first option every time a question is rendered and default selecting first option as selected ans
+    this.#updateSelectedInputToDefault();
+    this.#updateSelectedOptionLabelStyle(
+      this.#getFormOptionsHtmlEl().at(0).labels
+    );
+
+    // 2) changing current style to show which quesiton we are on
+    this.#updateScoreTrackerCurrentQuesStyle();
+  }
+
+  /**
+   * Renders current questions details on UI
+   * Populate data like question title and their respective options
+   *
+   * DEV NOTE - when converting labels we only need first label as no other labels are present
+   */
+  #renderCurrentQuestionDetails() {
     this.#getFormTitleHtmlEl().innerHTML =
       this.#getCurrentQuestionInDisplay()['question'];
-    console.log(this.#formOptionsHtmlEl);
     this.#getFormOptionsHtmlEl().forEach((element, i) => {
-      console.log(element, i);
       element.innerText = this.#getCurrentQuestionInDisplay().optionsList.at(i);
       element.value = this.#getCurrentQuestionInDisplay().optionsList.at(i);
-      const labelList = Array.from(element.labels);
-      console.log(labelList);
-      labelList.at(0).innerText =
+      Array.from(element.labels).at(0).innerText =
         this.#getCurrentQuestionInDisplay().optionsList.at(i);
     });
-    console.log(this.#formOptionsHtmlEl);
-    this.#getTotalScoreBoardEl().innerText = this.#user.getScore();
+  }
+
+  /**
+   * renders information and other necessary in UI
+   */
+  renderForm() {
+    this.#preRenderStyling();
+    this.#renderCurrentQuestionDetails();
   }
 }

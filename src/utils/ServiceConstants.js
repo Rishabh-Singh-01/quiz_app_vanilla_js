@@ -33,4 +33,7 @@ export class ServiceConstants {
   static SCORE_TRACKER_NON_ATTEMPTED = 'question_mark';
   static SCORE_TRACKER_CORRECT_ANS = 'check';
   static SCORE_TRACKER_INCORRECT_ANS = 'close';
+
+  // html text
+  static TEXT_SUBMIT_BTN_LAST_QUES = 'Submit & Generate Quiz Report';
 }

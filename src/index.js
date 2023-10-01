@@ -6,4 +6,3 @@ const syncUI = new SyncUI(user);
 syncUI.attachEventListeners();
 syncUI.createScoreTracker();
 syncUI.renderForm();
-console.log(user);

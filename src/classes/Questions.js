@@ -82,12 +82,6 @@ export class Questions {
 
   static checkProvidedAnsIsCorrect(questionId, ansGiven) {
     const question = this.#questions[questionId];
-    console.log(ansGiven);
-    console.log(question);
-    console.log(
-      'the check value is ' +
-        question['optionsList'].at(question['answerIndex'])
-    );
 
     // .toString is a workaround in case somebody passed a question with values as number
     return (
