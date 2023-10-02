@@ -247,7 +247,7 @@ export class SyncUI {
     );
   }
 
-  #submitQuestionHandler() {
+  submitQuestionHandler() {
     const isSubmittedAnsCorrect = Questions.checkProvidedAnsIsCorrect(
       this.#getCurrentQuestionInDisplay()['id'],
       this.#getCurrentlySelectedOptionValue()
@@ -278,7 +278,7 @@ export class SyncUI {
     // event handler for submit btn and check the question
     this.#getFormQuestionSubmitBtnEl().addEventListener('click', (e) => {
       e.preventDefault();
-      this.#submitQuestionHandler();
+      this.submitQuestionHandler();
     });
 
     // event handler for options in the form question
@@ -343,6 +343,6 @@ export class SyncUI {
   renderForm() {
     this.#preRenderStyling();
     this.#renderCurrentQuestionDetails();
-    this.#getTimerCounter().restartTimer(this.#submitQuestionHandler);
+    this.#getTimerCounter().restartTimer(this);
   }
 }
