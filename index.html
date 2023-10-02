@@ -18,7 +18,7 @@
   </head>
   <body>
     <header id="dfa" class="heading-secondary header">This is quiz</header>
-    <div class="container grid grid--2-cols-skew grid--center-v">
+    <div class="box-container container grid grid--2-cols-skew grid--center-v">
       <div id="question_container">
         <form id="question_form">
           <h3 id="question_title" class="heading-tertiary question-title"></h3>
@@ -73,11 +73,16 @@
         <h2 class="heading-tertiary score-card-title">Total numbers scored:</h2>
         <span id="total_score" class="total-score"></span>
       </div>
-      <div>
+      <aside>
         <ul id="score_tracker" class="list"></ul>
-      </div>
+      </aside>
     </div>
-
+    <div class="box-container bottom-container">
+      <button class="btn restart-btn">
+        <span> Restart Quiz </span
+        ><span class="material-symbols-outlined"> refresh </span>
+      </button>
+    </div>
     <script type="module" src="./src/index.js"></script>
   </body>
 </html>

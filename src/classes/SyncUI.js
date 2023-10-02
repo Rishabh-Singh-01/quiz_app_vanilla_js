@@ -61,6 +61,11 @@ export class SyncUI {
   #getScoreTrackerEl() {
     return document.getElementById(ServiceConstants.HTML_ID_SCORE_TRACKER);
   }
+  #getRestartBtnEl() {
+    return document.querySelector(
+      `.${ServiceConstants.HTML_CLASS_RESTART_BTN}`
+    );
+  }
 
   // cta methods
   /**
@@ -108,6 +113,26 @@ export class SyncUI {
       li.appendChild(liSpanIcon);
       this.#getScoreTrackerEl().appendChild(li);
     }
+  }
+
+  /**
+   * Resets the icons from score tracker to default value ie question mark
+   */
+  #resetScoreTrackerIcons() {
+    const listItemList = Array.from(
+      document.querySelectorAll(
+        `.${ServiceConstants.HTML_CLASS_SCORE_TRACKER_LI_ICON}`
+      )
+    );
+    listItemList.forEach((el) => {
+      el.innerText = ServiceConstants.SCORE_TRACKER_NON_ATTEMPTED;
+      el.classList.remove(
+        ServiceConstants.HTML_CLASS_SCORE_TRACKER_LI_ICON_CORRECT
+      );
+      el.classList.remove(
+        ServiceConstants.HTML_CLASS_SCORE_TRACKER_LI_ICON_INCORRECT
+      );
+    });
   }
 
   /**
@@ -234,6 +259,7 @@ export class SyncUI {
         this.#updateUserData(isSubmittedAnsCorrect, false);
         this.#displayFinalScoreCard();
         this.#removeScoreTrackerQuestionsStyle();
+        this.#getRestartBtnEl().remove();
         return;
       }
 
@@ -249,6 +275,14 @@ export class SyncUI {
         this.#setCurrentlySelectedOptionValue(e.target.value);
         this.#updateSelectedOptionLabelStyle(e.target.labels);
       });
+    });
+
+    // event listener for restart quiz button
+    this.#getRestartBtnEl().addEventListener('click', (e) => {
+      this.#user.resetUserData();
+      this.#resetScoreTrackerIcons();
+      this.renderForm();
+      TransitionAnimation.animateTransition();
     });
   }
 

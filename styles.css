@@ -42,16 +42,7 @@ body {
   font-size: var(--fs-20);
 }
 
-/* GENERAL REUSABLE STYLES */
-.container {
-  /* 1140px */
-  max-width: 120rem;
-  padding: var(--space-32);
-  margin: 0 auto;
-  box-shadow: var(--box-shadow-main);
-  border-radius: var(--space-16);
-}
-
+/* More general classes */
 .grid {
   display: grid;
   column-gap: 6.4rem;
@@ -123,12 +114,30 @@ body {
   transform: scale(1.5);
   cursor: pointer;
 }
-/*  NON RESUABLE CUSTOMIZED STYLES */
+
+/* More specific classes */
+.box-container {
+  max-width: 120rem;
+  margin: 0 auto;
+}
+
+.score-tracker-li,
+.final-score-card,
+.bottom-container,
+.restart-btn,
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  padding: var(--space-32);
+  box-shadow: var(--box-shadow-main);
+  border-radius: var(--space-16);
+}
 
 .header {
   padding: var(--space-32) var(--space-0);
-  display: flex;
-  align-items: center;
   justify-content: center;
 }
 
@@ -146,12 +155,16 @@ body {
   font-weight: 800;
 }
 
-.form-submit-btn {
-  border: var(--space-4) solid var(--color-main-tint-01);
-  padding: var(--space-16);
+.form-submit-btn,
+.restart-btn {
   border-radius: var(--space-8);
   font-weight: 600;
   transition: all ease-in-out 0.2s;
+  padding: var(--space-16);
+}
+
+.form-submit-btn {
+  border: var(--space-4) solid var(--color-main-tint-01);
 }
 
 .form-submit-btn:hover {
@@ -169,8 +182,6 @@ body {
 }
 
 .score-tracker-li {
-  display: flex;
-  align-items: center;
   justify-content: space-around;
 }
 
@@ -196,8 +207,6 @@ body {
 }
 
 .final-score-card {
-  display: flex;
-  align-items: center;
   justify-self: left;
   gap: var(--space-16);
 }
@@ -210,6 +219,24 @@ body {
   color: var(--color-main);
   font-weight: 600;
   font-size: var(--fs-30);
+}
+
+.bottom-container {
+  padding: var(--space-64) 0;
+  justify-content: right;
+}
+
+.restart-btn {
+  gap: var(--space-16);
+  background-color: var(--color-main-tint-01);
+  border: var(--space-4) solid var(--bg-main);
+  color: var(--bg-main);
+}
+
+.restart-btn:hover {
+  background-color: var(--bg-main);
+  color: var(--text-color-main);
+  border: var(--space-4) solid var(--color-main-tint-01);
 }
 
 /* SKELETON LOADING FOR TRANSITION */

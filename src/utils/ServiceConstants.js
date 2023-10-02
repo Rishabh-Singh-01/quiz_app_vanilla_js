@@ -20,6 +20,7 @@ export class ServiceConstants {
   static HTML_CLASS_INVISIBLE = 'invisible';
   static HTML_CLASS_GENERIC_LIST_ITEM = 'list-item';
   static HTML_CLASS_TRANSITION_ANIMATION = 'transition-animation';
+  static HTML_CLASS_RESTART_BTN = 'restart-btn';
 
   // for type param
   static CHECK_TYPE_NUMBER = 'number';

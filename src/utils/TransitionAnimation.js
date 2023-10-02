@@ -35,13 +35,13 @@ export class TransitionAnimation {
   }
 
   static #removeAnimationClassNameToRequiredElements() {
-    this.#getFormTitleHtmlEl().classList.remove(
+    this.#getFormTitleHtmlEl()?.classList.remove(
       ServiceConstants.HTML_CLASS_TRANSITION_ANIMATION
     );
-    this.#getGenericListItemEl().forEach((el) =>
+    this.#getGenericListItemEl()?.forEach((el) =>
       el.classList.remove(ServiceConstants.HTML_CLASS_TRANSITION_ANIMATION)
     );
-    this.#getFormQuestionSubmitBtnEl().classList.remove(
+    this.#getFormQuestionSubmitBtnEl()?.classList.remove(
       ServiceConstants.HTML_CLASS_TRANSITION_ANIMATION
     );
   }

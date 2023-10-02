@@ -38,6 +38,17 @@ export class User {
     this.#previousQuestions.push(prevQuesNo);
   }
 
+  /**
+   * Resets user data ie data of the quiz its given till now
+   * This includes score to 0, no previous questions and new random question as first question
+   */
+  resetUserData() {
+    this.setScore(0);
+    while (this.getPreviousQuestions().length > 0)
+      this.getPreviousQuestions().pop();
+    this.setCurrentQuestionNo(Questions.getRandomQuestion()['id']);
+  }
+
   // updating the user
   update(updateScore, nextQuesRequired) {
     Helper.checkIllegalTypeParam(updateScore, 'number');
