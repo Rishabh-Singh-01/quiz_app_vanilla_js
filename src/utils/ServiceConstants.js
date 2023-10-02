@@ -44,4 +44,14 @@ export class ServiceConstants {
   static TIMER_TRANSITION_ANIMATION_IN_SECS = '1';
   static HTML_ID_TIMER_COUNTER = 'timer_counter';
   static TIMER_PER_QUESTION_IN_SECS = '10';
+
+  // toasts
+  static HTML_CLASS_TOAST_CONTAINER = 'toast-container';
+  static HTML_CLASS_TOAST_MESSAGE = 'toast-message';
+  static TEXT_MESSAGE_TOAST_CORRECT_ANS = 'Correct Answer for';
+  static TEXT_MESSAGE_TOAST_INCORRECT_ANS = 'Incorrect Answer for';
+  static HTML_CLASS_TOAST_CORRECT = 'toast-message-correct';
+  static HTML_CLASS_TOAST_INCORRECT = 'toast-message-incorrect';
+  static HTML_ID_TOAST_MESSAGE_BASE = 'toast-message';
+  static TIMER_TOAST_MESSAGE_IN_SECS = '5';
 }

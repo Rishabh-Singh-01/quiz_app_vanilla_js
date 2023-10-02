@@ -13,6 +13,7 @@
 
   --color-main: #bf3864;
   --color-main-tint-01: rgb(191, 56, 100, 0.6);
+  --color-black: black;
 
   --space-64: 6.4rem;
   --space-32: 3.2rem;
@@ -25,6 +26,8 @@
   --fs-30: 3rem;
   --fs-20: 2rem;
   --fs-16: 1.6rem;
+  --fs-12: 1.2rem;
+  --fs-08: 0.8rem;
 
   --box-shadow-main: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
@@ -123,6 +126,8 @@ body {
 .final-score-card,
 .bottom-container,
 .restart-btn,
+.toast-container,
+.toast-message,
 .header {
   display: flex;
   align-items: center;
@@ -244,6 +249,48 @@ body {
   background-color: var(--bg-main);
   color: var(--text-color-main);
   border: var(--space-4) solid var(--color-main-tint-01);
+}
+
+.toast-container {
+  font-size: var(--fs-12);
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  gap: var(--space-8);
+  transform: translate(var(--space-24), var(--space-24));
+}
+
+.toast-message {
+  font-size: inherit;
+  font-weight: 700;
+  justify-content: center;
+  gap: var(--space-8);
+  padding: var(--space-8);
+  align-self: stretch;
+  z-index: 999;
+  letter-spacing: 0.2px;
+}
+
+.toast-message > span:first-child {
+  font-size: var(--fs-20);
+  font-weight: bold;
+  background-color: var(--bg-main);
+  padding: var(--space-4);
+  border-radius: 50%;
+}
+
+.toast-message-correct {
+  background-color: lightgreen;
+  color: var(--color-black);
+}
+.toast-message-incorrect {
+  background-color: var(--color-main);
+  color: var(--bg-main);
+}
+.toast-message-incorrect > span:first-child {
+  color: var(--color-main);
 }
 
 /* SKELETON LOADING FOR TRANSITION */

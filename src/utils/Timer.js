@@ -36,6 +36,15 @@ export class Timer {
   }
 
   /**
+   * Stops the timer and removes from UI
+   */
+  stopTimer() {
+    clearInterval(this.#getPreviousSetIntervalCounterId());
+    this.#setCounter(0);
+    this.#getTimerCounterEl().innerText = `${this.#getCounter()}s`;
+  }
+
+  /**
    * This method restarts the timer from required timer and display a clock like system decrementing counter
    * every second till it hits 0 which will invoke timerHitsZeroCb method
    * @param {*} syncUI - instance of syncUI class providing the method that will be invoked when timer hits 0

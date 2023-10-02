@@ -1,5 +1,6 @@
 import { ServiceConstants } from '../utils/ServiceConstants.js';
 import { Timer } from '../utils/Timer.js';
+import { ToastMessage } from '../utils/ToastMessage.js';
 import { TransitionAnimation } from '../utils/TransitionAnimation.js';
 import { Helper } from './Helper.js';
 import { Questions } from './Questions.js';
@@ -184,6 +185,19 @@ export class SyncUI {
   }
 
   /**
+   * Display toast message according to the question submitted correct or not
+   * @param {*} isCorrect - boolean representing question submitted correct or not
+   */
+  #displayValidatedQuestionPopupMessage(isCorrect) {
+    const message = `${
+      isCorrect
+        ? ServiceConstants.TEXT_MESSAGE_TOAST_CORRECT_ANS
+        : ServiceConstants.TEXT_MESSAGE_TOAST_INCORRECT_ANS
+    } Ques ${this.#user.getPreviousQuestions().length + 1}`;
+    ToastMessage.toast(message, isCorrect);
+  }
+
+  /**
    *
    * @param { NodeListOf<HTMLLabelElement>} selectedOptionlabelList - List of labels mapped with selected radio button
    * update the selected option label with new styles
@@ -247,12 +261,17 @@ export class SyncUI {
     );
   }
 
+  /**
+   * Handler to handle the submission of the question, contains updation of user and UI
+   * @returns nothing in case last question has been submitted
+   */
   submitQuestionHandler() {
     const isSubmittedAnsCorrect = Questions.checkProvidedAnsIsCorrect(
       this.#getCurrentQuestionInDisplay()['id'],
       this.#getCurrentlySelectedOptionValue()
     );
     this.#updateScoreTrackerIcon(isSubmittedAnsCorrect);
+    this.#displayValidatedQuestionPopupMessage(isSubmittedAnsCorrect);
 
     // incase all the questions are finised then display score board and return
     if (this.#checkLastQuestion()) {
@@ -260,6 +279,7 @@ export class SyncUI {
       this.#displayFinalScoreCard();
       this.#removeScoreTrackerQuestionsStyle();
       this.#getRestartBtnEl().remove();
+      this.#getTimerCounter().stopTimer();
       return;
     }
 
