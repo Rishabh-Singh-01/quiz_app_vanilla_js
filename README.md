@@ -31,7 +31,7 @@ Functionality issues:
   - Possible Fixes: Could be solved by using some workaround like making clearInterval somehow async etc. This i suspect this probably is also happening for animation transition and toast popup as well.
 - UI changes: Need to do some minor ui changes to make it much better.
 
-** HOW TO RUN **
+**HOW TO RUN**
 
 There are different methods to properly run this. I would be using vscode live server to run it since its the easiest way.
 
