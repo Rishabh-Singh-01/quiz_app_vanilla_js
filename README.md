@@ -34,9 +34,10 @@ Functionality issues:
 ** HOW TO RUN **
 
 There are different methods to properly run this. I would be using vscode live server to run it since its the easiest way.
-1 First download/clone the code using zip or git clone.
-1 Open vs code for the downloaded code with index.html in root folder.
-1 Install _Live Server_ extension by _Ritwick Dey_.
-1 It should work out of the box for this project but if its not working please configure it as per official instruction.
-1 Go to the bottom right corner and click on _Go Live_ button to start live serving.
-1 The webpage will be displayed in the browser.
+
+1. First download/clone the code using zip or git clone.
+1. Open vs code for the downloaded code with index.html in root folder.
+1. Install _Live Server_ extension by _Ritwick Dey_.
+1. It should work out of the box for this project but if its not working please configure it as per official instruction.
+1. Go to the bottom right corner and click on _Go Live_ button to start live serving.
+1. The webpage will be displayed in the browser.
