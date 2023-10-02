@@ -15,9 +15,16 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
+    <script type="module" defer src="./src/index.js"></script>
   </head>
   <body>
-    <header id="dfa" class="heading-secondary header">This is quiz</header>
+    <header id="dfa" class="header">
+      <span class="heading-secondary">Random Quiz</span>
+      <p class="timer">
+        <span>Time Remaining: </span>
+        <span id="timer_counter" class="timer-counter">30s</span>
+      </p>
+    </header>
     <div class="box-container container grid grid--2-cols-skew grid--center-v">
       <div id="question_container">
         <form id="question_form">
@@ -83,6 +90,5 @@
         ><span class="material-symbols-outlined"> refresh </span>
       </button>
     </div>
-    <script type="module" src="./src/index.js"></script>
   </body>
 </html>

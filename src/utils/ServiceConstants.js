@@ -42,4 +42,6 @@ export class ServiceConstants {
 
   // timers
   static TIMER_TRANSITION_ANIMATION_IN_SECS = '1';
+  static HTML_ID_TIMER_COUNTER = 'timer_counter';
+  static TIMER_PER_QUESTION_IN_SECS = '10';
 }

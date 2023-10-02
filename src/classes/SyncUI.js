@@ -1,4 +1,5 @@
 import { ServiceConstants } from '../utils/ServiceConstants.js';
+import { Timer } from '../utils/Timer.js';
 import { TransitionAnimation } from '../utils/TransitionAnimation.js';
 import { Helper } from './Helper.js';
 import { Questions } from './Questions.js';
@@ -10,6 +11,7 @@ import { User } from './User.js';
 export class SyncUI {
   #user;
   #currentlySelectedOptionValue;
+  #timerCounter;
 
   constructor(user) {
     if (!(user instanceof User)) {
@@ -27,6 +29,9 @@ export class SyncUI {
     this.#currentlySelectedOptionValue = Questions.getQuestionById(
       this.#user.getCurrentQuestionNo()
     ).optionsList.at(0);
+
+    // embedding timer counter - no need for DI
+    this.#timerCounter = new Timer();
   }
 
   // Refactored to directly fetch dom elements instead of storing as fields
@@ -65,6 +70,9 @@ export class SyncUI {
     return document.querySelector(
       `.${ServiceConstants.HTML_CLASS_RESTART_BTN}`
     );
+  }
+  #getTimerCounter() {
+    return this.#timerCounter;
   }
 
   // cta methods
@@ -239,6 +247,28 @@ export class SyncUI {
     );
   }
 
+  #submitQuestionHandler() {
+    const isSubmittedAnsCorrect = Questions.checkProvidedAnsIsCorrect(
+      this.#getCurrentQuestionInDisplay()['id'],
+      this.#getCurrentlySelectedOptionValue()
+    );
+    this.#updateScoreTrackerIcon(isSubmittedAnsCorrect);
+
+    // incase all the questions are finised then display score board and return
+    if (this.#checkLastQuestion()) {
+      this.#updateUserData(isSubmittedAnsCorrect, false);
+      this.#displayFinalScoreCard();
+      this.#removeScoreTrackerQuestionsStyle();
+      this.#getRestartBtnEl().remove();
+      return;
+    }
+
+    TransitionAnimation.animateTransition();
+    // incase there are remaining questions
+    this.#updateUserData(isSubmittedAnsCorrect, true);
+    this.renderForm();
+  }
+
   /**
    * attaches event listener to the appropriate dom elements
    *
@@ -248,25 +278,7 @@ export class SyncUI {
     // event handler for submit btn and check the question
     this.#getFormQuestionSubmitBtnEl().addEventListener('click', (e) => {
       e.preventDefault();
-      const isSubmittedAnsCorrect = Questions.checkProvidedAnsIsCorrect(
-        this.#getCurrentQuestionInDisplay()['id'],
-        this.#getCurrentlySelectedOptionValue()
-      );
-      this.#updateScoreTrackerIcon(isSubmittedAnsCorrect);
-
-      // incase all the questions are finised then display score board and return
-      if (this.#checkLastQuestion()) {
-        this.#updateUserData(isSubmittedAnsCorrect, false);
-        this.#displayFinalScoreCard();
-        this.#removeScoreTrackerQuestionsStyle();
-        this.#getRestartBtnEl().remove();
-        return;
-      }
-
-      TransitionAnimation.animateTransition();
-      // incase there are remaining questions
-      this.#updateUserData(isSubmittedAnsCorrect, true);
-      this.renderForm();
+      this.#submitQuestionHandler();
     });
 
     // event handler for options in the form question
@@ -331,5 +343,6 @@ export class SyncUI {
   renderForm() {
     this.#preRenderStyling();
     this.#renderCurrentQuestionDetails();
+    this.#getTimerCounter().restartTimer(this.#submitQuestionHandler);
   }
 }
