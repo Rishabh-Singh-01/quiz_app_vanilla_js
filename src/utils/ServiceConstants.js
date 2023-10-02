@@ -18,6 +18,8 @@ export class ServiceConstants {
   static HTML_CLASS_OPTION_CHOSEN = 'option-selected';
   static HTML_CLASS_FINAL_SCORE_CARD_VISIBLE = 'final-score-card';
   static HTML_CLASS_INVISIBLE = 'invisible';
+  static HTML_CLASS_GENERIC_LIST_ITEM = 'list-item';
+  static HTML_CLASS_TRANSITION_ANIMATION = 'transition-animation';
 
   // for type param
   static CHECK_TYPE_NUMBER = 'number';
@@ -36,4 +38,7 @@ export class ServiceConstants {
 
   // html text
   static TEXT_SUBMIT_BTN_LAST_QUES = 'Submit & Generate Quiz Report';
+
+  // timers
+  static TIMER_TRANSITION_ANIMATION_IN_SECS = '1';
 }

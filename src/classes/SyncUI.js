@@ -1,4 +1,5 @@
 import { ServiceConstants } from '../utils/ServiceConstants.js';
+import { TransitionAnimation } from '../utils/TransitionAnimation.js';
 import { Helper } from './Helper.js';
 import { Questions } from './Questions.js';
 import { User } from './User.js';
@@ -236,6 +237,7 @@ export class SyncUI {
         return;
       }
 
+      TransitionAnimation.animateTransition();
       // incase there are remaining questions
       this.#updateUserData(isSubmittedAnsCorrect, true);
       this.renderForm();
